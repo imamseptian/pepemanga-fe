@@ -7,29 +7,10 @@ import {
   HomeNewMangaRelease,
   HomePopularSection,
   Loader,
-  NewCard,
   NewCardShimmer,
 } from "../components";
 import { ThemeContext } from "../store/ThemeContext";
-
-const MyCover = memo(({ thumb, idx, text }) => {
-  console.log("add thumb " + idx);
-  return (
-    <div>
-      <img
-        src={thumb}
-        alt=""
-        style={{
-          height: 150,
-          marginBottom: 10,
-          marginRight: 10,
-          borderRadius: 5,
-        }}
-      />
-      {`image ${text} ${idx}`}
-    </div>
-  );
-});
+import ErrorIcon from "@material-ui/icons/Error";
 
 const ShimmerNewManga = memo(({ shimmerVal, isLight }) => {
   console.log("SHimmer ku");
@@ -73,7 +54,7 @@ export default function Home() {
   // const [manhwaList, setmanhwaList] = useState([]);
   const [genreList, setgenreList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [myKey, setmyKey] = useState("");
+  const [isError, setisError] = useState(false);
 
   useEffect(() => {
     fetchManga();
@@ -101,14 +82,27 @@ export default function Home() {
       ])
       .then(
         axios.spread((...responses) => {
-          console.log(REACT_APP_API_URL);
-          setmangaList(responses[0].data.manga_list);
-          setpopularList(responses[1].data.manga_list);
-          // setrecommendedList(responses[2].data.manga_list);
-          // setmanhuaList(responses[3].data.manga_list);
-          // setmanhwaList(responses[4].data.manga_list);
-          setgenreList(responses[2].data.list_genre);
-          setIsLoading(false);
+          // console.log(REACT_APP_API_URL);
+          // setmangaList(responses[0].data.manga_list);
+          // setpopularList(responses[1].data.manga_list);
+          // // setrecommendedList(responses[2].data.manga_list);
+          // // setmanhuaList(responses[3].data.manga_list);
+          // // setmanhwaList(responses[4].data.manga_list);
+          // setgenreList(responses[2].data.list_genre);
+          // setIsLoading(false);
+
+          if (responses[0].data.status) {
+            setmangaList(responses[0].data.manga_list);
+            setpopularList(responses[1].data.manga_list);
+            // setrecommendedList(responses[2].data.manga_list);
+            // setmanhuaList(responses[3].data.manga_list);
+            // setmanhwaList(responses[4].data.manga_list);
+            setgenreList(responses[2].data.list_genre);
+            setIsLoading(false);
+          } else {
+            setIsLoading(false);
+            setisError(true);
+          }
 
           // use/access the results
         })
@@ -117,109 +111,61 @@ export default function Home() {
         console.log(REACT_APP_API_URL);
         console.log(errors);
         // alert("error");
+        setisError(true);
         setIsLoading(false);
         // react on errors.
       });
   };
 
-  const getManga2 = () => {
-    setIsLoading(true);
-
-    const { REACT_APP_API_URL } = process.env;
-
-    let popularUrl2 = `${REACT_APP_API_URL}api/manga/popular/2`;
-
-    axios
-      .get(popularUrl2)
-      .then((res) => {
-        console.log(res.data);
-        setpopularList(res.data.manga_list);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        alert(popularUrl2);
-        setIsLoading(false);
-      });
-  };
-
-  // const shimmerVal = [
-  //   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  // ];
-
-  const NewManga = () => {
-    return (
-      <>
-        {mangaList.map((item, index) => {
-          return <NewCard key={index} item={item} />;
-        })}
-      </>
-    );
-  };
   const MyTypography = withStyles((theme) => ({
     root: {
       color: theme.palette[isLight ? "light" : "dark"].fontMain,
     },
   }))(Typography);
 
-  // const MyCover = ({ thumb, idx }) => {
-  //   console.log("add thumb " + idx);
-  //   return (
-  //     <img
-  //       src={thumb}
-  //       alt=""
-  //       style={{
-  //         height: 150,
-  //         marginBottom: 10,
-  //         marginRight: 10,
-  //         borderRadius: 5,
-  //       }}
-  //     />
-  //   );
-  // };
+  if (isError) {
+    return (
+      <div
+        style={{
+          display: "flex",
 
-  return (
-    <div>
-      {isLoading ? <Loader /> : null}
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Pepe-Manga Homepage</title>
-      </Helmet>
-
-      {/* <HomeComicSection
-        title={"Populer"}
-        isLoading={isLoading}
-        mangaList={popularList}
-        keyword="popular"
-        endpoint="/popular/1"
-      /> */}
-      {/* <ImageMangaMemo mangaList={popularList} isLight={isLight} /> */}
-
-      <HomePopularSection
-        title={"Populer"}
-        isLoading={isLoading}
-        mangaList={popularList}
-        keyword="popular"
-        endpoint="/popular/1"
-        isLight={isLight}
-      />
-
-      <MyTypography variant="h5">Update Terbaru</MyTypography>
-
-      <HomeNewMangaRelease
-        // shimmerVal={shimmerVal}
-        isLight={isLight}
-        isLoading={isLoading}
-        mangaList={mangaList}
-        genreList={genreList}
-      />
-
-      {/* <button
-        onClick={() => {
-          getManga2();
+          justifyContent: "center",
+          alignItems: "center",
+          height: "70vh",
         }}
       >
-        Click page 2
-      </button> */}
-    </div>
-  );
+        <ErrorIcon style={{ fontSize: 50, marginRight: 10 }} />
+        <MyTypography variant="h4">Terjadi Kesalahan Pada Server</MyTypography>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        {isLoading ? <Loader /> : null}
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Pepe-Manga Homepage</title>
+        </Helmet>
+
+        <HomePopularSection
+          title={"Populer"}
+          isLoading={isLoading}
+          mangaList={popularList}
+          keyword="popular"
+          endpoint="/popular/1"
+          isLight={isLight}
+        />
+
+        <MyTypography variant="h5">Update Terbaru</MyTypography>
+
+        <HomeNewMangaRelease
+          // shimmerVal={shimmerVal}
+          isLight={isLight}
+          isLoading={isLoading}
+          mangaList={mangaList}
+          genreList={genreList}
+        />
+      </div>
+    );
+  }
 }

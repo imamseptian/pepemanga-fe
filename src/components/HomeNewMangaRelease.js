@@ -4,7 +4,7 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import NextIcon from "@material-ui/icons/SkipNext";
 import clsx from "clsx";
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { HomeGenres, NewCard, NewCardShimmer } from "./";
 
@@ -43,6 +43,7 @@ const ShimmerNewManga = ({ shimmerVal, isLight }) => {
 const HomeNewMangaRelease = memo(
   ({ isLight, isLoading, mangaList, genreList }) => {
     console.log("pretty big component");
+    const [myCustomState, setmyCustomState] = useState("KEKW");
     const useStyles = makeStyles((theme) => ({
       contentWrapper: {
         display: "flex",

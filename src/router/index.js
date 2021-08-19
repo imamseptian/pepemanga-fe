@@ -18,6 +18,7 @@ const Router = () => {
         </PageWrapper>
         {/* <Home /> */}
       </Route>
+
       <Route exact path="/komik/:page">
         <PageWrapper>
           <KomikPage

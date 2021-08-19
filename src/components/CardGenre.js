@@ -7,8 +7,7 @@ import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { ThemeContext } from "../store/ThemeContext";
 
-export default function CardHome({ title, thumbnail, type, slug }) {
-  const { isLight } = useContext(ThemeContext);
+export default function CardHome({ title, thumbnail, type, slug, isLight }) {
   const useStyles = makeStyles((theme) => ({
     root: {
       // maxWidth: 345,

@@ -28,9 +28,9 @@ import clsx from "clsx";
 import React, { useEffect, useState, lazy, Suspense } from "react";
 import { NavLink, useHistory } from "react-router-dom";
 import { ThemeContext } from "../store/ThemeContext";
-// import { MyCustomDrawer } from "./";
+import { MyCustomDrawer } from "./";
 
-const MyCustomDrawer = lazy(() => import("./MyCustomDrawer"));
+// const MyCustomDrawer = lazy(() => import("./MyCustomDrawer"));
 
 const drawerWidth = 240;
 
@@ -155,13 +155,15 @@ export default function PageWrapper(props) {
       },
     },
     searchIcon: {
-      padding: theme.spacing(0, 2),
       height: "100%",
       position: "absolute",
-      pointerEvents: "none",
+      // pointerEvents: "none",
       display: "flex",
       alignItems: "center",
-      justifyContent: "center",
+      cursor: "pointer",
+      // justifyContent: "flex=",
+      right: 30,
+      zIndex: 99,
     },
     inputRoot: {
       color: "inherit",
@@ -169,11 +171,12 @@ export default function PageWrapper(props) {
     inputInput: {
       padding: theme.spacing(1, 1, 1, 0),
       // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+      // paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+      paddingLeft: 10,
       transition: theme.transitions.create("width"),
       width: "100%",
       [theme.breakpoints.up("sm")]: {
-        width: "12ch",
+        width: "17ch",
         "&:focus": {
           width: "20ch",
         },
@@ -219,17 +222,17 @@ export default function PageWrapper(props) {
     setOpen(false);
   };
 
-  const RenderDrawer = () =>
-    open ? (
-      <Suspense fallback={<div>Loading</div>}>
-        <MyCustomDrawer
-          isLight={isLight}
-          open={open}
-          handleDrawerClose={handleDrawerClose}
-          handleChange={handleChange}
-        />
-      </Suspense>
-    ) : null;
+  // const RenderDrawer = () =>
+  //   open ? (
+  //     <Suspense fallback={<div>Loading</div>}>
+  //       <MyCustomDrawer
+  //         isLight={isLight}
+  //         open={open}
+  //         handleDrawerClose={handleDrawerClose}
+  //         handleChange={handleChange}
+  //       />
+  //     </Suspense>
+  //   ) : null;
 
   return (
     <ThemeContext.Provider value={{ isLight, setisLight }}>
@@ -263,11 +266,8 @@ export default function PageWrapper(props) {
             </NavLink>
 
             <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
               <InputBase
-                placeholder="Search…"
+                placeholder="Cari"
                 classes={{
                   root: classes.inputRoot,
                   input: classes.inputInput,
@@ -285,137 +285,25 @@ export default function PageWrapper(props) {
                 value={keyword}
               />
             </div>
+            <div
+              onClick={() => {
+                let myQuery = encodeURIComponent(keyword.trim());
+                history.push(`/search/${myQuery}`);
+              }}
+              className={classes.searchIcon}
+            >
+              <SearchIcon />
+            </div>
           </Toolbar>
         </AppBar>
-        <RenderDrawer />
-        {/* <MyCustomDrawer
+        {/* <RenderDrawer /> */}
+        <MyCustomDrawer
           isLight={isLight}
           open={open}
           handleDrawerClose={handleDrawerClose}
           handleChange={handleChange}
-        /> */}
-        {/* <Drawer
-          className={classes.drawer}
-          variant="temporary"
-          anchor="left"
-          open={open}
-          onClose={handleDrawerClose}
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <div className={classes.drawerHeader}>
-            <IconButton
-              onClick={handleDrawerClose}
-              className={classes.iconDark}
-            >
-              <ChevronLeftIcon />
-            </IconButton>
-          </div>
-          <Divider />
-          <List>
-            <NavLink
-              onClick={handleDrawerClose}
-              to="/"
-              className={clsx(classes.drawerText)}
-            >
-              <ListItem button>
-                <ListItemIcon>
-                  <HomeIcon className={clsx(classes.iconDark)} />
-                </ListItemIcon>
-                <ListItemText primary={"Home"} />
-              </ListItem>
-            </NavLink>
-          </List>
-          <Divider />
-          <List>
-            <NavLink
-              onClick={handleDrawerClose}
-              to="/komik/1"
-              className={clsx(classes.drawerText)}
-            >
-              <ListItem button>
-                <ListItemIcon>
-                  <FirstBookIcon className={clsx(classes.iconDark)} />
-                </ListItemIcon>
-                <ListItemText primary={"Daftar Manga"} />
-              </ListItem>
-            </NavLink>
+        />
 
-            <NavLink
-              onClick={handleDrawerClose}
-              to="/popular/1"
-              className={clsx(classes.drawerText)}
-            >
-              <ListItem button>
-                <ListItemIcon>
-                  <SecondBookIcon className={clsx(classes.iconDark)} />
-                </ListItemIcon>
-                <ListItemText primary={"Popular"} />
-              </ListItem>
-            </NavLink>
-
-            <NavLink
-              onClick={handleDrawerClose}
-              to="/manhwa/1"
-              className={clsx(classes.drawerText)}
-            >
-              <ListItem button>
-                <ListItemIcon>
-                  <FirstBookIcon className={clsx(classes.iconDark)} />
-                </ListItemIcon>
-                <ListItemText primary={"Manhwa"} />
-              </ListItem>
-            </NavLink>
-
-            <NavLink
-              onClick={handleDrawerClose}
-              to="/manhua/1"
-              className={clsx(classes.drawerText)}
-            >
-              <ListItem button>
-                <ListItemIcon>
-                  <SecondBookIcon className={clsx(classes.iconDark)} />
-                </ListItemIcon>
-                <ListItemText primary={"Manhua"} />
-              </ListItem>
-            </NavLink>
-          </List>
-          <Divider />
-          <Typography
-            variant="subtitle1"
-            align="center"
-            className={clsx(classes.drawerText)}
-          >
-            Theme
-          </Typography>
-          <div
-            style={{
-              display: "flex",
-              padding: "10px 15px",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              variant="subtitle2"
-              className={clsx(classes.drawerText)}
-            >
-              Dark
-            </Typography>
-            <AntSwitch
-              checked={isLight}
-              onChange={handleChange}
-              name="checkedC"
-            />
-            <Typography
-              variant="subtitle2"
-              className={clsx(classes.drawerText)}
-            >
-              Light
-            </Typography>
-          </div>
-        </Drawer> */}
         <main className={clsx(classes.content)}>
           <div className={classes.drawerHeader} />
           {props.children}

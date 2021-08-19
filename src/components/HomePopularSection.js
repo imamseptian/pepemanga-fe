@@ -65,7 +65,7 @@ const HomePopularSection = memo(
           </Typography>
           {endpoint && (
             <NavLink to={endpoint} className={clsx(classes.linkFont)}>
-              <Typography paragraph variant="h6">
+              <Typography paragraph variant="body2">
                 Lihat Semua
               </Typography>
             </NavLink>

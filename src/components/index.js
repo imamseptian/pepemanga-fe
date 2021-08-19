@@ -15,6 +15,8 @@ import MyCustomDrawer from "./MyCustomDrawer";
 import ImageMangaMemo from "./ImageMangaMemo";
 import HomePopularSection from "./HomePopularSection";
 import HomeNewMangaRelease from "./HomeNewMangaRelease";
+import DetailManga from "./DetailManga";
+import DetailMangaShimmer from "./DetailMangaShimmer";
 
 export {
   CardHome,
@@ -34,4 +36,6 @@ export {
   ImageMangaMemo,
   HomePopularSection,
   HomeNewMangaRelease,
+  DetailManga,
+  DetailMangaShimmer,
 };

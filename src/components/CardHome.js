@@ -17,8 +17,8 @@ export default function CardHome({
   updated_on,
   chapter,
   slug,
+  isLight,
 }) {
-  const { isLight } = useContext(ThemeContext);
   const useStyles = makeStyles((theme) => ({
     root: {
       // maxWidth: 345,

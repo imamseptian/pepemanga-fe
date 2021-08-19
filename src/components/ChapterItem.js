@@ -5,8 +5,7 @@ import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { ThemeContext } from "../store/ThemeContext";
 
-const ChapterItem = ({ chapter, title, slug }) => {
-  const { isLight } = useContext(ThemeContext);
+const ChapterItem = ({ chapter, title, slug, isLight }) => {
   const useStyles = makeStyles((theme) => ({
     chapterItem: {
       border: "1px solid black",
